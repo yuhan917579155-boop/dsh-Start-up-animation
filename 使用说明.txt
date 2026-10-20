@@ -1,0 +1,101 @@
+﻿哈夫克开机动画 · DSH 插件包 v1.8.0（全屏版）
+=====================================
+
+给 DeepSeek Harness 加一段《三角洲行动》哈夫克（HAAVK）风格的开机动画：
+浅蓝白斜切底 → 菱形徽记描边落墨 → 八行系统清单逐行点亮 → 徽记落印 + WELCOME → 溶解进主界面。
+
+
+一、怎么装（Windows，最省事）
+----------------------------
+1. 把整个文件夹解压出来（不要只拷 安装.cmd 这一个文件）
+2. 双击「安装.cmd」
+3. 它会：
+   - 自动找你的 DeepSeek Harness（桌面版）
+   - 提示你关闭它（按回车即可，装完会自动帮你重开）
+   - 把插件装进你的 profile
+4. 打开后的第一次启动就能看到开机动画
+
+如果你用的是命令行版（npm i -g @deepseek-ai/dsh 那种），安装器会自动认出来，
+装到 web profile，装完自己重新跑一次 dsh web 就行。
+
+
+二、装完怎么调
+--------------
+DSH 里：设置 → 启动动画
+
+可以改：
+  · 播放时机（每次启动 / 每会话一次 / 每天一次）
+  · 深浅主题、动画速度、是否允许跳过、是否必须交互
+  · 身份名称、编号、权限等级、各类品牌文案、三种主题色
+  · 界面音效、语音播报、音量、语速、音调
+
+注意：默认是静音的。「界面音效」和「语音播报」两个开关要自己打开。
+另外，这个插件没有背景音乐（BGM）这一档，只有 5 句人声 + 8 个音效。
+
+
+二·补：全屏
+----------
+这一版默认「片头播放时把窗口铺满整块屏幕」（连任务栏一起盖住），播完自动还原成
+你原来的窗口大小和位置。
+
+想改的话，编辑 %USERPROFILE%\.dsh\dsh-startup.json（没有就新建），写：
+
+  {
+    "fullscreen": "true"
+  }
+
+三个值：
+  "true"      ← 默认，真全屏（盖住任务栏）
+  "maximize"  ← 只最大化，任务栏还在，切换更柔和
+  "off"       ← 不改变窗口，片头只铺满窗口内容区
+
+改完不用重装，下次开机生效。
+（只有桌面版有效 —— 命令行版跑在浏览器里，插件没有窗口可以控制，会自动跳过。）
+
+三、卸载
+--------
+双击「卸载.cmd」，它会关掉 DSH、从 profile 里移除插件、再帮你打开。
+卸载后开机会恢复成 DSH 自己的启动画面。
+
+
+四、其他系统 / 手动安装
+----------------------
+macOS / Linux，或者想自己敲命令：
+
+  dsh plugin --profile web add ./plugin/dsh-haavk-1.8.0-fullscreen.tgz
+
+桌面版（Windows）手动命令：
+
+  set ELECTRON_RUN_AS_NODE=1
+  set DSH_EXE=<你的安装目录>\DeepSeek Harness.exe
+  set DSH_CLI=<你的安装目录>\resources\app.asar\dsh\node_modules\@deepseek-ai\dsh-desktop-host\lib\cli.js
+  "%DSH_EXE%" --expose-internals "%DSH_CLI%" plugin --profile desktop add "<解压目录>\plugin\dsh-haavk-1.8.0-fullscreen.tgz"
+
+
+五、装完没反应？
+----------------
+1. 一定要「完全退出」DSH 再打开（关窗口不算，进程要退干净，托盘图标右键 → 退出）
+2. 桌面端装完必须重启一次，插件是在启动时装配的
+3. 命令行版（浏览器里用）装完还要 Ctrl+Shift+R 硬刷新，
+   因为客户端 bundle 带 max-age=31536000, immutable，普通 F5 会一直用旧副本
+4. 桌面端的「设置 → 插件」列表里可能看不到它 —— 这是正常的：
+   它是直接进 profile 的 bundle 栈（和命令行装插件同一个机制），加载是一样的
+
+
+六、它改了什么（可以放心）
+------------------------
+· 只写 ~/.dsh 下面的东西：profile 的 package.json / dependencies / node_modules，
+  以及一份 ~/.dsh/plugins/dsh-haavk-1.8.0-fullscreen.tgz
+· 不碰程序安装目录（DeepSeek Harness.exe 所在的文件夹一个文件都不动），不影响升级和签名
+· 不联网、不上传任何东西；素材全部在插件包内本地提供
+· 装完那个压缩包就可以删了（安装器已经把 tgz 复制到 ~/.dsh/plugins）
+
+
+七、出处与版权
+--------------
+· 插件：dsh-haavk v1.8.0，MIT，作者 YUNvexoxo
+  https://github.com/YUNvexoxo/dsh-haavk
+· 上游底座：dsh-startup-screen v1.1.1，MIT，作者 沈宏宏
+  https://github.com/6shenhonghong9/dsh-startup-screen
+· 代码是 MIT，但「哈夫克 / HAAVK / 三角洲行动」的商标与素材权利归腾讯 / 天美，
+  插件的 MIT 许可不覆盖这部分。自己用、发给朋友玩没问题，别拿去商用或打包再分发。
